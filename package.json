@@ -1,0 +1,52 @@
+{
+  "name": "@south-paw/koa-mongoose",
+  "version": "0.0.0",
+  "description": "Mongoose middleware for Koa 2",
+  "keywords": [
+    "koa",
+    "koa2",
+    "middleware",
+    "mongo",
+    "mongodb",
+    "mongoose"
+  ],
+  "homepage": "https://github.com/South-Paw/koa-mongoose",
+  "bugs": "https://github.com/South-Paw/koa-mongoose/issues",
+  "license": "MIT",
+  "author": {
+    "name": "Alex Gabites",
+    "email": "hello@southpaw.co.nz",
+    "url": "http://southpaw.co.nz/"
+  },
+  "files": [
+    "src"
+  ],
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/South-Paw/koa-mongoose.git"
+  },
+  "scripts": {
+    "format": "prettier --write **/*.js",
+    "lint": "eslint .",
+    "test": "jest"
+  },
+  "dependencies": {
+    "debug": "^4.1.1",
+    "mongoose": "^5.5.12",
+    "muri": "^1.3.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.0.1",
+    "coveralls": "^3.0.3",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "jest": "^24.8.0",
+    "prettier": "^1.17.1"
+  },
+  "peerDependencies": {},
+  "publishConfig": {
+    "access": "public"
+  }
+}
