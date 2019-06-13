@@ -4,7 +4,6 @@
 
 [![npm](https://img.shields.io/npm/v/@south-paw/koa-mongoose.svg)](https://www.npmjs.com/package/@south-paw/koa-mongoose)
 [![CI Status](https://img.shields.io/travis/South-Paw/koa-mongoose.svg)](https://travis-ci.org/South-Paw/koa-mongoose)
-[![Coveralls Status](https://img.shields.io/coveralls/github/South-Paw/koa-mongoose.svg)](https://coveralls.io/github/South-Paw/koa-mongoose)
 [![Dependencies](https://david-dm.org/South-Paw/koa-mongoose/status.svg)](https://david-dm.org/South-Paw/koa-mongoose)
 [![Dev Dependencies](https://david-dm.org/South-Paw/koa-mongoose/dev-status.svg)](https://david-dm.org/South-Paw/koa-mongoose?type=dev)
 
@@ -14,6 +13,7 @@
 
 ```js
 const Koa = require('koa');
+const mongoose = require('@south-paw/koa-mongoose');
 
 const app = new Koa();
 
@@ -86,9 +86,6 @@ format
 
 # lint source
 yarn lint
-
-# todo
-yarn test
 ```
 
 ## License
