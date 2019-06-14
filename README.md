@@ -82,7 +82,7 @@ Pull the repo and install dependencies with `yarn`
 
 ```bash
 # format source with prettier
-format
+yarn format
 
 # lint source
 yarn lint
