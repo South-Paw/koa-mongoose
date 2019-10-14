@@ -28,6 +28,7 @@ const config = {
     // these are the default middleware options, see https://mongoosejs.com/docs/connections.html#options
     useNewUrlParser: true,
     useCreateIndex: true,
+    useUnifiedTopology: true
     reconnectTries: Number.MAX_VALUE, // Never stop trying to reconnect
     reconnectInterval: 500, // Reconnect every 500ms
     poolSize: 10, // Maintain up to 10 socket connections

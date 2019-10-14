@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "debug": "^4.1.1",
-    "mongoose": "^5.5.15",
+    "mongoose": "^5.7.4",
     "muri": "^1.3.0"
   },
   "devDependencies": {

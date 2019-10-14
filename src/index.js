@@ -5,6 +5,7 @@ const muri = require('muri');
 const defaultMongoOptions = {
   useNewUrlParser: true,
   useCreateIndex: true,
+  useUnifiedTopology: true,
   reconnectTries: Number.MAX_VALUE, // Never stop trying to reconnect
   reconnectInterval: 500, // Reconnect every 500ms
   poolSize: 10, // Maintain up to 10 socket connections
