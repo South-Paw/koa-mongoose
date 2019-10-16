@@ -8,7 +8,7 @@ const defaultOpts = {
   useNewUrlParser: true,
   useCreateIndex: true,
   useUnifiedTopology: true,
-  reconnectTries: Number.MAX_VALUE,
+  reconnectTries: Number.MAX_SAFE_INTEGER,
   reconnectInterval: 500,
   poolSize: 10,
   bufferMaxEntries: 0,
@@ -62,7 +62,7 @@ describe(name, () => {
   it(`should call connect with a given uri`, () => {
     const { openUriMock } = mongooseSetup();
 
-    const uri = 'mongodb://localhost/mydb';
+    const uri = 'mongodb+srv://localhost/mydb';
     const opts = { ...defaultOpts };
 
     middleware({ uri });
@@ -134,7 +134,7 @@ describe(name, () => {
 
     middleware({ events: { error, connected }, useDefaultErrorHandler: false });
 
-    expect(onMock).toHaveBeenCalledTimes(3);
+    expect(onMock).toHaveBeenCalledTimes(2);
     expect(onMock).toHaveBeenCalledWith('error', error);
     expect(onMock).toHaveBeenCalledWith('connected', connected);
   });
@@ -192,7 +192,7 @@ describe(name, () => {
     ctx.model('users');
 
     expect(throwMock).toHaveBeenCalledTimes(1);
-    expect(throwMock).toHaveBeenCalledWith(500, new Error(`Model 'users' not found in 'default'`));
+    expect(throwMock).toHaveBeenCalledWith(500, new Error(`Model name 'users' not found in 'default'`));
   });
 
   it(`calling ctx.document should return a provided model document`, () => {

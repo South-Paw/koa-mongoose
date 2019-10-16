@@ -4,16 +4,24 @@
 
 [![npm](https://img.shields.io/npm/v/@south-paw/koa-mongoose.svg)](https://www.npmjs.com/package/@south-paw/koa-mongoose)
 [![CI Status](https://img.shields.io/travis/South-Paw/koa-mongoose.svg)](https://travis-ci.org/South-Paw/koa-mongoose)
+[![Coveralls Status](https://img.shields.io/coveralls/github/South-Paw/koa-mongoose.svg)](https://coveralls.io/github/South-Paw/koa-mongoose)
 [![Dependencies](https://david-dm.org/South-Paw/koa-mongoose/status.svg)](https://david-dm.org/South-Paw/koa-mongoose)
 [![Dev Dependencies](https://david-dm.org/South-Paw/koa-mongoose/dev-status.svg)](https://david-dm.org/South-Paw/koa-mongoose?type=dev)
 
 ---
+
+## Features
+
+- Adds `model()` and `document()` to the koa `ctx`
+- Config for automatically loading schemas and events on the mongoose instance
 
 ## Basic Usage
 
 The middleware config accepts a `user` and `pass` or you can use a `uri` or `url` as an escape hatch for other url schemes.
 
 Unauthenticated connections will also work by omitting the `user` and `pass` and only providing a `host`, `port` and `db`.
+
+Note: If you're using the `mongodb+srv` syntax to connect to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas), you [should use the mongoose `dbName` option to specify the database](https://stackoverflow.com/questions/48917591/fail-to-connect-mongoose-to-atlas/48917626#48917626) because you currently cannot in the connection string. ([source](https://mongoosejs.com/docs/connections.html)) Be sure to change the default koa-mongoose `db` option to match as well.
 
 ```js
 const Koa = require('koa');
@@ -33,7 +41,7 @@ const config = {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,
-    reconnectTries: Number.MAX_VALUE, // Never stop trying to reconnect
+    reconnectTries: Number.MAX_SAFE_INTEGER, // Never stop trying to reconnect
     reconnectInterval: 500, // Reconnect every 500ms
     poolSize: 10, // Maintain up to 10 socket connections
     bufferMaxEntries: 0, // If not connected, return errors immediately rather than waiting for reconnect
@@ -67,19 +75,19 @@ const config = {
     disconnecting: () => console.log('mongoose: disconnecting'),
     disconnected: () => console.log('mongoose: disconnected'),
   },
+  useDefaultErrorHandler: false, // enable or disable the default error handler
 };
 
 // apply the middleware
 app.use(mongoose(config));
 
 // and you can now use the middleware via the ctx with
-// ctx.model(modelName)
-// ctx.document(modelName, document)
+// `ctx.model(modelName)` and `ctx.document(modelName, document)`
 ```
 
 ## Issues and Bugs
 
-If you find any, please report them [here](https://github.com/South-Paw/koa-mongoose/issues) so they can be squashed.
+If you manage to find any, please report them [here](https://github.com/South-Paw/koa-mongoose/issues) so they can be squashed.
 
 ## Development and Contributing
 
