@@ -11,6 +11,10 @@
 
 ## Basic Usage
 
+The middleware config accepts a `user` and `pass` or you can use a `uri` or `url` as an escape hatch for other url schemes.
+
+Unauthenticated connections will also work by omitting the `user` and `pass` and only providing a `host`, `port` and `db`.
+
 ```js
 const Koa = require('koa');
 const mongoose = require('@south-paw/koa-mongoose');
@@ -28,7 +32,7 @@ const config = {
     // these are the default middleware options, see https://mongoosejs.com/docs/connections.html#options
     useNewUrlParser: true,
     useCreateIndex: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
     reconnectTries: Number.MAX_VALUE, // Never stop trying to reconnect
     reconnectInterval: 500, // Reconnect every 500ms
     poolSize: 10, // Maintain up to 10 socket connections
@@ -67,11 +71,11 @@ const config = {
 
 // apply the middleware
 app.use(mongoose(config));
+
+// and you can now use the middleware via the ctx with
+// ctx.model(modelName)
+// ctx.document(modelName, document)
 ```
-
-The middleware config accepts a `uri`, `url` or a `user` and `pass`.
-
-Unauthenticated connections will also work by omitting the `user` and `pass` and only providing a `host`, `port` and `db`.
 
 ## Issues and Bugs
 
