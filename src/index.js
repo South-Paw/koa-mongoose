@@ -1,12 +1,11 @@
-const debug = require('debug')('koa:mongo');
+const debug = require('debug')('southpaw:koamongoose');
 const mongoose = require('mongoose');
-const muri = require('muri');
 
 const defaultMongoOptions = {
   useNewUrlParser: true,
   useCreateIndex: true,
   useUnifiedTopology: true,
-  reconnectTries: Number.MAX_VALUE, // Never stop trying to reconnect
+  reconnectTries: Number.MAX_SAFE_INTEGER, // Never stop trying to reconnect
   reconnectInterval: 500, // Reconnect every 500ms
   poolSize: 10, // Maintain up to 10 socket connections
   bufferMaxEntries: 0, // If not connected, return errors immediately rather than waiting for reconnect
@@ -27,56 +26,47 @@ const middleware = (options = {}) => {
     mongoOptions = defaultMongoOptions,
     schemas = {},
     events = {},
+    useDefaultErrorHandler = true,
   } = options;
 
-  let dbName = db;
-  let mongoUrl = uri || url;
-  let mongoOpts = { ...defaultMongoOptions, ...mongoOptions };
-
+  const mongoUrl =
+    uri ||
+    url ||
+    (user && pass && authSource
+      ? `mongodb://${user}:${pass}@${host}:${port}/${db}?authSource=${authSource}`
+      : `mongodb://${host}:${port}/${db}`);
+  const mongoOpts = { ...defaultMongoOptions, ...mongoOptions };
   const models = {};
 
-  if (!mongoUrl) {
-    if (user && pass && authSource) {
-      mongoUrl = `mongodb://${user}:${pass}@${host}:${port}/${db}?authSource=${authSource}`;
-    } else {
-      mongoUrl = `mongodb://${host}:${port}/${db}`;
-    }
-  } else {
-    const o = muri(mongoUrl);
-    dbName = o.db;
-  }
-
   debug('Create middleware');
+  const connection = mongoose.createConnection();
 
-  const conn = mongoose.createConnection();
-
-  conn.on('error', err => {
-    conn.close();
-    debug(`An error occured with the Mongoose connection.`);
-    throw new Error(err);
+  // Load each schema by it's key
+  Object.keys(schemas).forEach(schemaName => {
+    models[schemaName] = connection.model(schemaName, schemas[schemaName](mongoose));
   });
 
-  if (schemas) {
-    // Load each schema by it's key
-    Object.keys(schemas).forEach(key => {
-      models[key] = conn.model(key, schemas[key](mongoose));
+  // Load each event by it's key
+  Object.keys(events).forEach(event => connection.on(event, events[event]));
+
+  // Enable the default error handler
+  if (useDefaultErrorHandler) {
+    connection.on('error', err => {
+      connection.close();
+      debug(`An error occured with the Mongoose connection.`);
+      throw new Error(err);
     });
   }
 
-  if (events) {
-    // Load each event by it's key
-    Object.keys(events).forEach(key => conn.on(key, events[key]));
-  }
+  connection.openUri(mongoUrl, mongoOpts);
 
-  conn.openUri(mongoUrl, mongoOpts);
-
-  function getModel(modelName) {
+  const getModel = modelName => {
     if (!models.hasOwnProperty(modelName)) {
-      throw new Error(`Model '${modelName}' not found in '${dbName}'`);
+      throw new Error(`Model name '${modelName}' not found in '${db}'`);
     }
 
     return models[modelName];
-  }
+  };
 
   return async (ctx, next) => {
     ctx.model = modelName => {

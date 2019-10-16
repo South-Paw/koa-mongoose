@@ -1,8 +1,8 @@
 const mongoose = {};
 
-function __setupCreateConnectionMock(createConnection) {
+const __setupCreateConnectionMock = createConnection => {
   mongoose.createConnection = createConnection;
-}
+};
 
 mongoose.__setupCreateConnectionMock = __setupCreateConnectionMock;
 
