@@ -1,4 +1,5 @@
 module.exports = {
   collectCoverageFrom: ['**/*.js'],
-  coveragePathIgnorePatterns: ['/node_modules/', '<rootDir>/dist/', 'jest.config.js'],
+  coveragePathIgnorePatterns: ['/node_modules/', 'jest.config.js'],
+  testEnvironment: 'node',
 };
