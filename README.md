@@ -94,11 +94,14 @@ If you manage to find any, please report them [here](https://github.com/South-Pa
 Pull the repo and install dependencies with `yarn`
 
 ```bash
-# format source with prettier
-yarn format
+# run tests
+yarn test
 
 # lint source
 yarn lint
+
+# format source with prettier
+yarn format
 ```
 
 ## License
